@@ -1,4 +1,7 @@
 security:
+    encoders:
+        my_encoder: auto
+
     enable_authenticator_manager: true
     # https://symfony.com/doc/current/security.html#where-do-users-come-from-user-providers
     providers:
