@@ -2,6 +2,7 @@
 
 namespace App\Security;
 
+use App\Controller\SecurityController;
 use App\Repository\UserRepository;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,6 +15,7 @@ use Symfony\Component\Security\Http\Authenticator\AbstractAuthenticator;
 use Symfony\Component\Security\Http\Authenticator\AuthenticatorInterface;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\PasswordUpgradeBadge;
+use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authenticator\Passport\Passport;
 use Symfony\Component\Security\Http\Authenticator\Passport\PassportInterface;
@@ -59,14 +61,16 @@ class LoginFormAuthenticator extends AbstractAuthenticator
     {
         // find a user based on an "email" form field
         $user = $this->userRepository->findOneByEmail($request->request->get('email'));
+        $request->getSession()->set(SecurityController::LAST_EMAIL, $request->request->get('email'));
         if (!$user) {
             throw new CustomUserMessageAuthenticationException('Invalid credential!!');
         }
-        return new Passport(
+        return new Passport( 
             $user, 
             new PasswordCredentials($request->request->get('password')), 
             [// and CSRF protection using a "csrf_token" field
-            new CsrfTokenBadge('login_form', $request->request->get('csrf_token'))
+            new CsrfTokenBadge('login_form', $request->request->get('csrf_token')),
+            new RememberMeBadge
         ]);
     }
 
@@ -80,7 +84,8 @@ class LoginFormAuthenticator extends AbstractAuthenticator
      * will be authenticated. This makes sense, for example, with an API.
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $firewallName): ?Response
-    {
+    {   
+        $request->getSession()->getFlashBag()->add('success', 'logged in successfully');
         return new RedirectResponse($this->urlGeneratorInterface->generate('app_home'));
     }
 

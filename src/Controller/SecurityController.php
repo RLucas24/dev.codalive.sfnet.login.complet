@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class SecurityController extends AbstractController
 {
+    public const LAST_EMAIL = 'app_login_form_last_email';
     /**
      * @Route("/login", name="app_login", methods={"POST","GET"})
      */

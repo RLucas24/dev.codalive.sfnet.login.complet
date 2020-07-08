@@ -7,11 +7,22 @@
     <form novalidate method="POST">
         <div>
             <label for="email">Email:</label><br>
-            <input type="email" id="email" name="email" required autofocus>
+            <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            value="{{app.session.get(constant('App\\Controller\\SecurityController::LAST_EMAIL'))}}" 
+            required autofocus>
         </div>
         <div>
             <label for="password">Password:</label><br>
             <input type="password" id="password" name="password" required autofocus>
+        </div>
+        <div>
+            <label for="remember_me">
+                <input type="checkbox" id="remember_me" name="_remember_me">
+            Garde ma session active
+            </label>
         </div>
             <input type="hidden" name="csrf_token" value="{{ csrf_token('login_form') }}">
             
