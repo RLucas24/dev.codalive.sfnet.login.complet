@@ -1,0 +1,11 @@
+{% extends "/layouts/base.html.twig" %}
+
+{% block title 'Register' %}
+
+{% block body %}
+    <h1>Register</h1>
+    {{ form_start(registrationForm)}}
+        {{form_widget(registrationForm)}}
+        <input type="submit" value="Register" formnovalidate class="btn btn-primary">
+    {{form_end(registrationForm)}}
+{% endblock %}
