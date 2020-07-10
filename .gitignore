@@ -15,4 +15,4 @@
 /phpunit.xml
 ###< symfony/phpunit-bridge ###
 
-!var/var/sfnet_database.db
+!var/sfnet_database.db
